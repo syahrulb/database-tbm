@@ -12,8 +12,8 @@
     </div>
 </template>
 <script>
-import header from './header'
-import breadscrump from './breadscrump'
+import header from '../layouts/header'
+import breadscrump from '../layouts/breadscrump'
 export default {
     props:['title_utama','title_kecil','breadscrumb'],
     components :{

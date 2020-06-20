@@ -12,6 +12,11 @@ export default new Vuex.Store({
   },
   actions: {
   },
+  getters: {
+    isAuthenticated(state) {
+      return state.token !== null
+    }
+  },
   modules: {
-  }
+  },
 })

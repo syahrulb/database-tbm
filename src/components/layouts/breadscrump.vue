@@ -6,7 +6,7 @@
                 <small>{{title_kecil}} </small>
                 </h2>
             </div>
-            <div class="col-lg-5 col-md-6 col-sm-12">
+            <div v-if="breadscrumb" class="col-lg-5 col-md-6 col-sm-12">
                 <ul class="breadcrumb float-md-right ">
                 <app-list-breadscrump :lists="breadscrumb"></app-list-breadscrump>
                 </ul>
@@ -15,7 +15,7 @@
     </div>
 </template>
 <script>
-import listbreadscrump from '../listBeardscrump'
+import listbreadscrump from './listBeardscrump'
 export default {
     props:['title_utama','title_kecil','breadscrumb'],
     components:{
