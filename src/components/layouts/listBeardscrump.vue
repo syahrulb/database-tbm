@@ -5,7 +5,7 @@
                     :class="item.class"
                     tag="li" :to="item.url">
             <a href="javascript:">
-                <i class="zmdi zmdi-book"></i> 
+                <i :class="item.icon"></i> 
                 {{item.judul}}
             </a>
         </router-link>

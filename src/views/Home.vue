@@ -21,7 +21,7 @@
                             <p class="blockquote blockquote-primary">
                                 "Sistem ini berisikan infomasi mengenai : 
                                 <br> resto, catering, penginapan, persewaan alat, persewaan kendaraan, percetakan, dan toko alat medis"
-                                <br>
+                                <br> 
                                 <br>
                                 <small>
                                     - Tim Bantuan Medis UNJ, 2020
@@ -50,7 +50,7 @@ export default {
   data(){
     return {
       breadscrump :[
-        {url : '/', judul : 'home', class : 'breadcrumb-item', icon : 'zmdi zmdi-book'}
+        {url : '/', judul : 'home', class : 'breadcrumb-item', icon : 'zmdi zmdi-home'}
       ]
     }
   },

@@ -18,6 +18,12 @@
                     Home 
                 </a>
             </router-link>
+            <router-link to="tambah-database" tag="li" >
+                <a href="#">
+                    <i class="zmdi zmdi-file-text"></i> 
+                    Tambah Database 
+                </a>
+            </router-link>
             <li v-if="isAuthenticated" class="dropdown"  :class="{'show': headerDatabase}">
             <a href="javascript:" @click.prevent="headerDatabase = !headerDatabase" class="dropdown-toggle" 
             data-toggle="dropdown" role="button" aria-expanded="false"><i class="zmdi zmdi-assignment-o"></i> <span>Database</span> </a>
@@ -109,9 +115,6 @@ import { mapGetters } from "vuex";
         },
         computed :{
             ...mapGetters(['isAuthenticated'])
-        },
-        created(){
-            console.log(this.isAuthenticated);
         }
     }
 </script>

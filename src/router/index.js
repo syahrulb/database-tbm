@@ -12,6 +12,11 @@ const routes = [
     name: 'Sign In',
     component: () => import( '@/views/Signin')
   },
+  {
+    path: '/tambah-database',
+    name: 'Tambah Database',
+    component: () => import('@/views/formDatabase')
+  },
 ]
 
 const router = new VueRouter({

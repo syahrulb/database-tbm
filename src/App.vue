@@ -1,15 +1,31 @@
 <template>
   <div id="app">
-    <router-view/>
+    <transition name="slide" mode="out-in">
+      <router-view/>
+    </transition>
   </div>
 </template>
 <script>
+import { mapActions,mapGetters } from "vuex";
   export default {
       methods: {
+        ...mapActions([
+          'initListDatabase'
+        ])
+      },
+      computed:{
+        ...mapGetters([
+          'checkEmtyListDatabase'
+        ])
       },
       beforeCreate(){
         document.body.classList.add('theme-green')
         document.body.classList.add('ls-toggle-menu')
+      },
+      created(){
+        if(this.checkEmtyListDatabase){
+          this.initListDatabase();
+        }
       }
   }
 </script>
@@ -18,5 +34,6 @@
   @import './assets/css/main.css';
   @import './assets/css/hm-style.css';
   @import './assets/css/color_skins.css';
+  
 </style>
 
