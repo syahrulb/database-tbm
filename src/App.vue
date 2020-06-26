@@ -10,7 +10,7 @@ import { mapActions,mapGetters } from "vuex";
   export default {
       methods: {
         ...mapActions([
-          'initListDatabase'
+          'initListDatabase','tryAutoLogin'
         ])
       },
       computed:{
@@ -23,6 +23,7 @@ import { mapActions,mapGetters } from "vuex";
         document.body.classList.add('ls-toggle-menu')
       },
       created(){
+        this.tryAutoLogin();
         if(this.checkEmtyListDatabase){
           this.initListDatabase();
         }
@@ -34,6 +35,5 @@ import { mapActions,mapGetters } from "vuex";
   @import './assets/css/main.css';
   @import './assets/css/hm-style.css';
   @import './assets/css/color_skins.css';
-  
 </style>
 

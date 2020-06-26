@@ -17,6 +17,20 @@ const routes = [
     name: 'Tambah Database',
     component: () => import('@/views/formDatabase')
   },
+  {
+    path: '/table',
+    name: 'Detail Table',
+    components: {
+      default: () => import('@/views/tampildatabase'),
+    },
+    children:[
+      { 
+        path: ':id', 
+        name : 'id',
+        component: () => import('@/views/tampildatabase')
+      },
+    ],
+  },
 ]
 
 const router = new VueRouter({

@@ -10,7 +10,7 @@
                     <h2><strong>Form Tambah Database</strong> </h2>
                     <ul class="header-dropdown">
                       <li>
-                        <a href="#" @click="tampilmodal()" class="btn btn-lg bg-purple"><i class="zmdi zmdi-file-plus text-white"></i> tambah data </a>
+                        <a href="#" @click="tampilmodal()"  class="btn btn-lg bg-purple"><i class="zmdi zmdi-file-plus text-white"></i> tambah data </a>
                       </li>
                     </ul>
                   </div>
@@ -19,11 +19,11 @@
                       <div class="offset-md-1 col-md-10 offset-md-1">
                         <h6>Pilih kategori Database</h6>
                         <div class="form-group">
-                          <select name="select" class="form-control" @change="ubahKategory($event)">
-                            <option v-for="(item, index) in options" :key="index" :value="item.value" >{{item.text}} </option>
+                          <select name="select" class="form-control"  @change="ubahKategory($event)">
+                            <option v-for="(item, index) in options" :key="index" :value="item.value" :selected="item.value == kategory">{{item.text}} </option>
                           </select>
                         </div>
-                        <h6>data umum</h6>
+                        <h6>Data umum</h6>
                         <hr>
                         <div v-for="(item, index) in field_umum" :key="index" class="form-group">
                             <label 
@@ -35,24 +35,45 @@
                             :type="item.type" :name="item.name" 
                             :placeholder="item.label" 
                             v-model="data_umum[item.name]" :min="item.min" :max="item.max"
-                            :key="`field-${item.label}`" class="form-control" required autocomplete="false" />
+                            :key="`field-${item.label}`" class="form-control" required autocomplete="off" />
 
                             <textarea v-if="item.type === 'textarea'" 
                             :name="item.name" 
                             :placeholder="item.label" 
                             :id="item.name" 
                             v-model="data_umum[item.name]"
-                            :key="`field-textarea-${item.label}`" class="form-control" required autocomplete="false">
+                            :key="`field-textarea-${item.label}`" class="form-control" required>
                             </textarea>
                         </div>
+                        <h6>Data Tambahan</h6>
+                        <hr>
+                        <div class="table-responsive">
+                          <table class="table table-bordered">
+                            <thead>
+                              <tr>
+                                <td v-for="(item, index) in field_data" :key="index">{{item.label}} </td>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr v-for="(value1, index) in data_tambahan" :key="index" >
+                                <td v-for="(value2, index) in field_data" :key="index" >
+                                  {{value1[value2.name]}}
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                        <hr>
+                        <button type="button" class="btn btn-md btn-primary float-right" @click="btnSimpan()">Simpan</button>
                       </div>
                     </div>
                   </div>
               </div>
           </div>
         </div>
-      <app-modal :fields="field_data" :judul="'resto'" >
+      <app-modal :fields="field_data" :judul="'resto'" @tambahanData="tambahanData" >
       </app-modal>
+
     </app-template>
   </div>
 </template>
@@ -69,7 +90,7 @@ export default {
         {url : '/tambah-database', judul : 'Tambah Data', class : 'breadcrumb-item', icon : 'zmdi zmdi-file-text'}
       ],
       data_umum : {},
-      test : null
+      data_tambahan : [],
     }
   },
   components: {
@@ -81,19 +102,69 @@ export default {
           'field_umum','field_data', 'database', 'kategory'
       ]),
       options(){
-        return this.$store.getters.getListDatabae
+        return this.$store.getters.getListDatabase
       },
   },
   methods:{
       ...mapActions('database', [
-          'initDatabase'
+          'initDatabase', 'changeDatabase','SimpanToFirebase'
       ]),
       tampilmodal(){
         this.$modal.show('modalformData');
       },
       ubahKategory(event){
-        console.log(event.target.value);
-        
+        this.changeDatabase(event.target.value);
+        this.data_umum = {};
+        this.data_tambahan =[];
+        this.$swal('Sukses', 'Form telah diubah', 'success');
+      },
+      tambahanData(data){
+        this.data_tambahan.push(data)
+      },
+      btnSimpan(){
+        let data_umum = this.data_umum;
+        let data_tambahan = this.data_tambahan
+        let database = {};
+        for (const [key, value] of Object.entries(data_umum)) {
+          database[key] = value;
+        }
+        database['data_tambahan'] =data_tambahan;
+        this.$swal({
+            title: 'Apakah Anda Yakin?',
+            icon: 'question',
+            text: 'Data data Akan disimpan.',
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Ya',
+            cancelButtonText: 'Tidak',
+            showCloseButton: true,
+            showLoaderOnConfirm: true,
+            allowOutsideClick: () => this.$swal.isLoading(),
+            preConfirm: () => {
+             return this.SimpanToFirebase(database).then(response => {
+                        return response;
+                      }, error => {
+                          return error;
+                      })
+            },
+        }).then((result) => {
+          if(!result.isConfirmed){
+            this.$swal('Gagal', 'Data belum disimpan di database', 'error');
+          }
+          else{
+            if (typeof result.value.response !== 'undefined') {
+                this.$swal('Gagal', result.value.response.data.results.message , 'error');
+            }
+            else{
+              this.$swal('Sukses', result.value.data.results.message, 'success');
+              this.onReset();
+            }
+          }
+        })
+      },
+      onReset(){
+        this.data_umum = {};
+        this.data_tambahan = [];
       }
   },
   created(){
@@ -103,7 +174,6 @@ export default {
       else{
           return
       }
-      
   }
 }
 </script>

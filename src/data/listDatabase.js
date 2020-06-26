@@ -1,6 +1,6 @@
 export default [
     {
-        text: "resto dan catering",
+        text: "Resto dan catering",
         value: "resto"
     }, 
     {
@@ -12,7 +12,7 @@ export default [
         value: "alat"
     }, 
     {
-        text: "Persewaan keendaraan",
+        text: "Persewaan kendaraan",
         value: "kendaraan"
     },
     {

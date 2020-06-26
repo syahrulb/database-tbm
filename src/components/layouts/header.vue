@@ -18,81 +18,37 @@
                     Home 
                 </a>
             </router-link>
-            <router-link to="tambah-database" tag="li" >
+            <router-link v-if="isAuthenticated" to="/tambah-database" tag="li" >
                 <a href="#">
                     <i class="zmdi zmdi-file-text"></i> 
                     Tambah Database 
                 </a>
             </router-link>
             <li v-if="isAuthenticated" class="dropdown"  :class="{'show': headerDatabase}">
-            <a href="javascript:" @click.prevent="headerDatabase = !headerDatabase" class="dropdown-toggle" 
+            <a href="#" @click.prevent="headerDatabase = !headerDatabase" class="dropdown-toggle" 
             data-toggle="dropdown" role="button" aria-expanded="false"><i class="zmdi zmdi-assignment-o"></i> <span>Database</span> </a>
             <ul class="dropdown-menu pullDown">
                 <li class="body">
                     <div class="slimScrollDiv" >
                         <ul class="menu list-unstyled" >
-                        <li>
-                            <a href="#">
-                                <div class="media">
-                                    <div class="media-body">
-                                        <span class="message">
-                                            User
-                                        </span>
+                            <router-link v-for="(item, index) in getListDatabase" :key="index" tag="li" :to="{path:'/table/'+item.value}">
+                                <a href="#">
+                                    <div class="media">
+                                        <div class="media-body">
+                                            <span class="message">
+                                                {{item.text}}
+                                            </span>
+                                        </div>
                                     </div>
-                                </div>
-                            </a>
-                        </li>
-                        <li class="">
-                            <a href="#">
-                                <div class="media">
-                                    <div class="media-body">
-                                        <span class="message ">
-                                            Sistem
-                                        </span>
-                                    </div>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <div class="media">
-                                    <div class="media-body">
-                                        <span class="message ">
-                                            Rule
-                                        </span>
-                                    </div>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <div class="media">
-                                    <div class="media-body">
-                                        <span class="message ">
-                                            Tahun
-                                        </span>
-                                    </div>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <div class="media">
-                                    <div class="media-body">
-                                        <span class="message ">
-                                            Group Sistem
-                                        </span>
-                                    </div>
-                                </div>
-                            </a>
-                        </li>
+                                </a>
+                            </router-link>
                         </ul>
                     </div>
                 </li>
             </ul>
             </li>
             <li v-if="isAuthenticated" class="float-right">
-                <a href="#" id="btn_keluar" class="js-right-sidebar">
+                <a href="#" @click.prevent="keluar()" id="btn_keluar" class="js-right-sidebar">
                     <i class="zmdi zmdi-close-circle"></i>
                 </a>
             </li>
@@ -106,7 +62,7 @@
     </nav>
 </template>
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
     export default {
         data(){
             return{
@@ -114,7 +70,32 @@ import { mapGetters } from "vuex";
             }
         },
         computed :{
-            ...mapGetters(['isAuthenticated'])
+            ...mapGetters(['isAuthenticated','getListDatabase'])
+        },
+        methods : {
+            ...mapActions(['logout']),
+            keluar(){
+                this.$swal({
+                    title: 'Apakah Anda Yakin?',
+                    icon: 'question',
+                    text: 'Anda akan keluar dari sistem.',
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Ya',
+                    cancelButtonText: 'Tidak',
+                    showCloseButton: true,
+                    showLoaderOnConfirm: true,
+                }).then((result) => {
+                    if(!result.isConfirmed){
+                        this.$swal('Gagal', 'Anda belum keluar dari sistem', 'error');
+                    }
+                    else{
+                        this.$swal('Sukses', 'Terimakasih telah menggunakan sistem database tbm', 'success');
+                        this.logout()
+                        this.$router.push('/signin')
+                    }
+                })
+            }
         }
     }
 </script>

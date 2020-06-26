@@ -18,16 +18,19 @@
                             <img src="@/assets/images/logo.png" width="30%" alt="Rounded Image" class="rounded mx-auto d-block">
                         </div>
                         <div class="col-md-12">
-                            <form method="POST" action="login" 
-                                  accept-charset="UTF-8" class="form-horizontal" 
-                                  enctype="multipart/form-data">
+                          <div v-if="error" class="alert alert-danger">
+                            <ul>
+                              <li v-for="(item, index) in error" :key="index">{{item.message}}</li>
+                            </ul>
+                          </div>
+                            <form action="#" @submit.prevent="submit">
                                 <div class="form-group">                                    
-                                    <input type="text" class="form-control" placeholder="Username">
+                                    <input type="text" v-model="form.email" class="form-control" placeholder="Username" autofocus>
                                 </div>
                                 <div class="form-group">                                    
-                                    <input type="password" class="form-control" placeholder="Password" autocomplete="false">
+                                    <input type="password" v-model="form.password" class="form-control" placeholder="Password" autocomplete="false">
                                 </div>
-                                <button class="btn btn-primary float-right">Masuk</button>
+                                <button type="submit" class="btn btn-primary float-right">Masuk</button>
                             </form>
                         </div>
                     </div>
@@ -41,10 +44,32 @@
 
 <script>
 import template from '@/components/template/auth'
+// import firebase from "firebase";
 export default {
   name: 'Sign-In',
   components: {
     appTemplate : template
-  }
+  },
+  methods: {
+    submit() {
+      this.$store.dispatch('login',this.form).then(response => {
+          console.log(response);
+          this.$swal('Berhasil', 'Berhasil Login', 'success');
+          this.$router.push('/tambah-database');
+      }, error => {
+          this.error = error.response.data.error.errors;
+          this.$swal('Gagal', 'Email dan password tidak cocok , koreksi kembali inputan anda', 'error');
+      });
+      }
+  },
+  data(){
+    return {
+      form : {
+        email : null,
+        password : null
+      },
+      error: null,
+    }
+  },
 }
 </script>
