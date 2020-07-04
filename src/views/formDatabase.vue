@@ -52,6 +52,7 @@
                             <thead>
                               <tr>
                                 <td v-for="(item, index) in field_data" :key="index">{{item.label}} </td>
+                                <td>Aksi</td>
                               </tr>
                             </thead>
                             <tbody>
@@ -59,6 +60,7 @@
                                 <td v-for="(value2, index) in field_data" :key="index" >
                                   {{value1[value2.name]}}
                                 </td>
+                                <td > <button class="btn btn-danger" @click="onDelete(index)">x</button> </td>
                               </tr>
                             </tbody>
                           </table>
@@ -165,6 +167,27 @@ export default {
       onReset(){
         this.data_umum = {};
         this.data_tambahan = [];
+      },
+      onDelete(id){
+        this.$swal({
+            title: 'Apakah Anda Yakin?',
+            icon: 'question',
+            text: 'Data tambahan akan dihapus dari table .',
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Ya',
+            cancelButtonText: 'Tidak',
+            showCloseButton: true,
+            showLoaderOnConfirm: true,
+        }).then((result) => {
+          if(!result.isConfirmed){
+            this.$swal('Gagal', 'Data tambahan belum dihapus', 'error');
+          }
+          else{
+            this.data_tambahan.splice(this.data_tambahan.indexOf(id), 1)
+            this.$swal('Sukses', 'Data Berhasil dihapus', 'success');
+          }
+        })
       }
   },
   created(){

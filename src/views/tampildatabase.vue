@@ -79,6 +79,12 @@ export default {
   components: {
     appTemplate : template,
   },
+  watch: {
+    '$route.params.id': function () {
+      this.initDatabase(this.$route.params.id);
+      this.redeclareData();
+    },
+  },
   computed :{
     ...mapGetters('tableDatabase',{
       data : 'get_data_umum',
@@ -90,12 +96,9 @@ export default {
     ...mapActions('tableDatabase',[
       'initDatabase', 'redeclareData'
       ]),
-      showData(){
-        console.log('oke');
-      }
   },
   created(){
-    this.initDatabase(this.judul);
+    this.initDatabase(this.$route.params.id);
     this.redeclareData();
   }
 }

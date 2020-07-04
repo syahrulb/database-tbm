@@ -31,6 +31,7 @@ const mutations = {
         })
     },
     'set_fieldData_umum'(state, datas) {
+        state.data = [];
         if (datas) {
             for (const item of Object.values(datas)){
                 state.data.push(item);

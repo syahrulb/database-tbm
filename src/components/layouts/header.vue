@@ -31,7 +31,7 @@
                 <li class="body">
                     <div class="slimScrollDiv" >
                         <ul class="menu list-unstyled" >
-                            <router-link v-for="(item, index) in getListDatabase" :key="index" tag="li" :to="{path:'/table/'+item.value}">
+                            <router-link v-for="(item, index) in getListDatabase" :key="index" tag="li" :to="{path:'/table/'+item.value}"  @click="headerDatabase = false">
                                 <a href="#">
                                     <div class="media">
                                         <div class="media-body">
