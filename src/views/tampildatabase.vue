@@ -26,7 +26,7 @@
                               :headers="field_umum"
                               :items="data"
                               :expanded.sync="expanded"
-                              item-key="name"
+                              item-key="nama"
                               show-expand
                               class="elevation-1"
                             >
