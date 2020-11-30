@@ -25,7 +25,7 @@
                           </div>
                             <form action="#" @submit.prevent="submit">
                                 <div class="form-group">                                    
-                                    <input type="text" v-model="form.email" class="form-control" placeholder="Username" autofocus>
+                                    <input type="text" v-model="form.username" class="form-control" placeholder="Username" autofocus>
                                 </div>
                                 <div class="form-group">                                    
                                     <input type="password" v-model="form.password" class="form-control" placeholder="Password" autocomplete="false">
@@ -56,16 +56,23 @@ export default {
           console.log(response);
           this.$swal('Berhasil', 'Berhasil Login', 'success');
           this.$router.push('/tambah-database');
-      }, error => {
-          this.error = error.response.data.error.errors;
-          this.$swal('Gagal', 'Email dan password tidak cocok , koreksi kembali inputan anda', 'error');
+      }).catch(er => {
+         console.log(er);
+          this.$swal(
+              "Gagal",
+              "mohon check kembali koneksi internet anda.",
+              "error"
+          );
       });
-      }
+    }
+  },
+  mounted() {
+    console.log(process.env);
   },
   data(){
     return {
       form : {
-        email : null,
+        username : null,
         password : null
       },
       error: null,

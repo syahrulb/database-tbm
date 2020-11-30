@@ -1,3 +1,5 @@
 module.exports = {
-    publicPath: '/tbm-database/'
+    publicPath: process.env.NODE_ENV === 'production'
+    ? '/database-tbm/'
+    : '/'
 }

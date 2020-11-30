@@ -7,23 +7,21 @@ import axios from '@/axios/auth'
 Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
-    user: {
-      loggedIn: false,
-      email: null,
-    },
+    user: null,
     token : null,
     listDatabase :{},
+    loggedIn: false,
   },
   mutations: {
     'set_listDatabase'(state, data) {
       state.listDatabase = data;
     },
     SET_LOGGED_IN(state, value) {
-      state.user.loggedIn = value;
+      state.loggedIn = value;
     },
     SET_USER(state, data) {
-      state.user.email = data;
-      localStorage.setItem('email', data);
+      state.user = data.user;
+      localStorage.setItem('user', data.user);
     },
     SET_TOKEN(state, token){
       state.token = token;
@@ -32,16 +30,16 @@ export default new Vuex.Store({
     'redeclare_login'(state) {
       if (state.token == null) {
         state.token = localStorage.getItem('token');
-        state.user.email = localStorage.getItem('email');
+        state.user = localStorage.getItem('user');
         state.user.loggedIn = true;
       }
     },
     'clear_auth'(state) {
       state.token = null;
-      state.user.loggedIn = false;
-      state.user.email = null;
+      state.loggedIn = false;
+      state.user = null;
       localStorage.removeItem("token");
-      localStorage.removeItem("email");
+      localStorage.removeItem("user");
     },
   },
   actions: {
@@ -64,12 +62,12 @@ export default new Vuex.Store({
       commit
     }, authData) {
       return new Promise((resolve, reject) => {
-        axios.post('accounts:signInWithPassword?key=AIzaSyCZTTEcH8Avq3kxt4xod96Hwe_jSXqtemI', authData)
+        axios.post('login', authData)
           .then(res => {
             commit('SET_LOGGED_IN', true);
-            commit("SET_USER", res.data.email);
-            commit("SET_TOKEN", res.data.idToken);
-            resolve(res)
+            commit("SET_USER", res.data.result);
+            commit("SET_TOKEN", res.data.result);
+            resolve(res.data)
           })
           .catch(error => {
             reject(error);
@@ -85,7 +83,7 @@ export default new Vuex.Store({
   },
   getters: {
     isAuthenticated(state) {
-      return state.user.loggedIn;
+      return state.loggedIn;
     },
     checkEmtyListDatabase(state){
       return Object.keys(state.listDatabase).length === 0

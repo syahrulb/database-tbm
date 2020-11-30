@@ -30,10 +30,4 @@ import { mapActions,mapGetters } from "vuex";
       }
   }
 </script>
-<style >
-  @import './assets/css/bootstrap.css';
-  @import './assets/css/main.css';
-  @import './assets/css/hm-style.css';
-  @import './assets/css/color_skins.css';
-</style>
 
